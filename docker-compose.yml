@@ -1,0 +1,43 @@
+version: '3.8'
+
+networks:
+  internal-network:
+
+services:
+  db:
+    image: postgres:16
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5433:5432"
+    networks:
+      - internal-network
+    environment:
+      - POSTGRES_PASSWORD=dwq21d21
+      - POSTGRES_USER=postgres
+
+  backend:
+    image: golang:1.22
+    volumes:
+      - ./app:/app
+    command: ["/app/main"]
+    networks:
+      - internal-network
+    environment:
+      - DB_PORT=5432
+      - DB_HOST=db
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:1.25.4
+    ports:
+      - "444:443"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./dist:/usr/share/nginx/html:ro
+    networks:
+      - internal-network
+    depends_on:
+      - backend
+      - db

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Работа с заметками</title>
+</head>
+<body>
+
+<h2>Создать новую заметку</h2>
+
+<form action="/createnote" method="post">
+  <label for="title">Заголовок:</label><br>
+  <input type="text" id="title" name="title"><br>
+  <label for="content">Содержание:</label><br>
+  <textarea id="content" name="content" rows="4" cols="50"></textarea><br>
+  <input type="submit" value="Создать">
+</form>
+
+<button onclick="openNotes()">Перейти к заметкам</button>
+
+<script>
+  function openNotes() {
+    var url = "http://localhost:444/api/notelist";
+    window.open(url, "_blank");
+  }
+</script>
+
+</body>
+</html>
